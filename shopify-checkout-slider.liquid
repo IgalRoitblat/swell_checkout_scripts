@@ -1,0 +1,145 @@
+<div class="order-summary__section order-summary__section--swell points-section swell-checkout-page" style="display:none;" data-type="apply-points" id="swell-checkout">
+  <div class="swell-attributes" style="display:none;">
+    <span id="swell-checkout-customer-id">{{ customer.id }}</span>
+    <span id="swell-checkout-customer-email">{{ customer.email }}</span>
+    <span id="swell-checkout-customer-tags">{{ customer.tags | json }}</span>
+    <span id="swell-checkout-total-price-cents">{{ checkout.subtotal_price }}</span>
+    <input id="swell-checkout-points-amount" value="0"></input>
+  </div>
+
+  <div class="swell-checkout-error-message" id="swell-checkout-error-message-amount" style="display:none;color:red;">Oops, You don't have any drops to redeem yet.</div>
+  <div class="swell-checkout-error-message" id="swell-checkout-error-message-general" style="display:none;color:red;">Sorry something went wrong.  Try again and if the problem persists please contact support.</div>
+
+  <div class="fieldset">
+    <div class="field">
+      <label class="BrandonTextWeb-Bold redeem-credits-title">You have <span class="points-balance-color"><span class="swell-point-balance">0</span> Points </span> </label>
+
+      <div class="input-holder">
+      </div>
+
+      <div class="footer-holder">
+      <span class="BrandonTextWeb-Bold redeem-content">Redeem <strong><span class=" slider-point-balance"></span> Points <span class="points-balance-color ">($<span class="point-balance swell-adjusted-point-balance"></span>)</span></strong></span>
+
+      <button type="submit" id="swell-checkout-redeem-btn" class="field__input-btn btn btn--default swell-button">
+        <span class="btn__content visually-hidden-on-mobile">Apply</span>
+        <svg class="icon-svg icon-svg--size-16 btn__icon shown-on-mobile" aria-hidden="true" focusable="false"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow"></use> </svg>
+        <svg class="icon-svg icon-svg--size-18 btn__spinner icon-svg--spinner-button" aria-hidden="true" focusable="false"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#spinner-button"></use> </svg>
+        <i class="btn__content shown-on-mobile icon icon--arrow"></i>
+        <i style="display:none;" class="fa fa-spinner fa-spin"></i>
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  if(window.location.href.indexOf("checkout") > -1 && window.location.href.indexOf("thank_you") == -1) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.2/rangeslider.min.css";
+        document.getElementsByTagName("head")[0].appendChild(link);
+
+        var range_script = document.createElement("script");
+        range_script.src = "https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.2/rangeslider.min.js";
+        document.getElementsByTagName("head")[0].appendChild(range_script);
+  }
+
+  // initialize slider.....
+  $(document).on("swell:setup", function() {
+    var centsPerPoint = spapi.variableRedemptionOption ? spapi.variableRedemptionOption.discount_rate_cents : 1;
+    var cartTotal = Swell.Checkout.getAmountDiscountedCents() + Swell.Checkout.getCheckoutTotalPriceCents();
+    var customerAccountBal = (spapi.customer.adjusted_points_balance * centsPerPoint) / 100 
+    var cartTotalAmmount = cartTotal/100
+
+    $(".input-holder").append('<input type="range" class="swell-range-slider" min="0" max="' + customerAccountBal + '" step="0.1" value="'+ customerAccountBal + '">');
+
+    slider_value = parseFloat($(".swell-range-slider").val());
+    
+    if (slider_value > cartTotalAmmount)
+    {
+      balanceAvailable = parseFloat((cartTotalAmmount / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(cartTotalAmmount.toFixed(2));
+    }
+    else
+    {
+      balanceAvailable = parseFloat((slider_value / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(slider_value.toFixed(2));
+    }
+    balanceAvailable = Math.ceil(balanceAvailable);
+    
+
+    $("#swell-checkout-points-amount").val(balanceAvailable);
+    $(".slider-point-balance").html(balanceAvailable);
+
+    $('input[type="range"]').rangeslider({
+      polyfill: false,
+      // Default CSS classes
+      rangeClass: 'rangeslider',
+      disabledClass: 'rangeslider--disabled',
+      horizontalClass: 'rangeslider--horizontal',
+      verticalClass: 'rangeslider--vertical',
+      fillClass: 'rangeslider__fill',
+      handleClass: 'rangeslider__handle',
+
+      // Callback function
+      onInit: function() {},
+
+      // Callback function
+      onSlide: function(position, value) {},
+
+      // Callback function
+      onSlideEnd: function(position, value) {}
+    });
+
+
+    $( ".swell-range-slider" ).change(function() {
+      $(".swell-range-slider").attr('step', 1);
+      var points_balance = Swell.Checkout.getCheckoutTotalPriceCents()/100;
+      var centsPerPoint = spapi.variableRedemptionOption.discount_rate_cents;
+      slider_value = parseFloat($(".swell-range-slider").val());
+      if (slider_value > cartTotalAmmount)
+      {
+        balanceAvailable = parseFloat((cartTotalAmmount / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(cartTotalAmmount.toFixed(2));
+      }
+      else
+      {
+        balanceAvailable = parseFloat((slider_value / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(slider_value.toFixed(2));
+      }
+      
+      balanceAvailable = Math.ceil(balanceAvailable);
+      $("#swell-checkout-points-amount").val(balanceAvailable.toFixed(2));
+      $(".slider-point-balance").html(balanceAvailable);
+
+      
+      //set slider max value
+      if (parseInt($(".swell-range-slider").val()) == parseInt($(".swell-range-slider").attr('max')))
+      {
+        $(".swell-range-slider").attr('step', 0.1);
+        slider_value = customerAccountBal;
+        if (slider_value > cartTotalAmmount)
+        {
+          balanceAvailable = parseFloat((cartTotalAmmount / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(cartTotalAmmount.toFixed(2));
+        }
+        else
+        {
+          balanceAvailable = parseFloat((slider_value / centsPerPoint) * 100.0);
+      $(".swell-adjusted-point-balance").html(slider_value.toFixed(2));
+        }
+        balanceAvailable = Math.ceil(balanceAvailable);
+       
+        $("#swell-checkout-points-amount").val(balanceAvailable);
+        $(".slider-point-balance").html(balanceAvailable);
+      }
+
+    });
+    //reset the last redeemPoints
+    $(document).on("swell:redemption", function(){
+      var lastRedeemPoints = $("#swell-checkout-points-amount").val();
+      setTimeout(function(){
+        $("#swell-checkout-points-amount").val(lastRedeemPoints);
+      }, 200);         
+    });
+  }); 
+</script>

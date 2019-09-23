@@ -1,0 +1,73 @@
+{{ "swell-checkout.css" | asset_url | stylesheet_tag}}
+    <div class="order-summary__section order-summary__section--swell" style="display:none;" id="swell-checkout">
+  <div style="display:none;">
+  	<span id="swell-checkout-customer-id">{{ customer.id }}</span>
+  	<span id="swell-checkout-customer-email">{{ customer.email }}</span>
+  	<span id="swell-checkout-customer-tags">{{ customer.tags | json }}</span>
+  	<span id="swell-checkout-total-price-cents">{{ checkout.total_price }}</span>
+  </div>
+  <div class="swell-wrapper" style="line-height: 22px;">
+    <div class="balance">
+    <span class="checkout-title">You have <span class="swell-point-balance"></span> Points</span>
+    </div>
+  </div>
+
+  <div class="swell-checkout-error-message" id="swell-checkout-error-message-amount" style="display:none;color:red;">Oops, You don't have enough points to redeem yet.</div>
+  <div class="swell-checkout-error-message" id="swell-checkout-error-message-general" style="display:none;color:red;">Sorry something went wrong.  Try again and if the problem persists please contact support.</div>
+  <div class="fieldset" style="margin-top: 15px;">
+    <div class="checkout-redemption-div field">
+      <div class="field__input-btn-wrapper">
+        <div class="field__input-wrapper field__input-wrapper--select">
+          <label class="field__label">Redeem Points</label>
+          <select class="field__input field__input--select" id="swell-checkout-redemption-options"></select>
+        </div>
+   
+        <button type="submit" id="swell-checkout-redeem-btn" class="field__input-btn btn btn--default swell-button">
+          <span class="btn__content visually-hidden-on-mobile">Apply</span>
+          <svg class="btn__content shown-on-mobile icon-svg icon-svg--size-16 btn__icon shown-on-mobile" aria-hidden="true" focusable="false"> <use xlink:href="#arrow"></use> </svg>
+          <i style="display:none;" class="fa fa-spinner fa-spin"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var is_dropdown_populated = false;
+
+  function populate_swell_dropdown(){
+    if ($("#swell-checkout-redemption-options option").length > 0){
+      $("#swell-checkout-redemption-options").html('');
+      var redemptionOptions = spapi.activeRedemptionOptions;
+      var customer_tier = spapi.customer.vip_tier;
+
+      if (!redemptionOptions) {
+        return;
+      }
+
+      redemptionOptions.forEach(function(redemptionOption){
+         $("#swell-checkout-redemption-options").append("<option value='" + redemptionOption.id + "'>" + redemptionOption.name + ' = ' + redemptionOption.cost_text  + 
+            "</option>");
+      })
+
+      is_dropdown_populated = true;
+    }
+  }
+  $(document).on("swell:setup", function(){
+    if (!is_dropdown_populated) {
+      populate_swell_dropdown();
+    }
+
+  });
+    
+  setTimeout(function(){
+    if (!is_dropdown_populated) {
+      populate_swell_dropdown();
+    }
+  }, 1500);
+    
+  setTimeout(function(){
+    if (!is_dropdown_populated) {
+      populate_swell_dropdown();
+    }
+  }, 5000);
+</script>
