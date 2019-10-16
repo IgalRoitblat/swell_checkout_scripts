@@ -1,0 +1,18 @@
+<!-- Add The following to theme.liquid file -->
+
+    <script>
+        (function ($) {
+            var whereToRedirectAfterRegistering =
+            '/pages/rewards'; // Change this to tell Shopify where you want to redirect after registering.
+
+            var registerForm = jQuery(
+            'form[action$="/account"][method="post"]'); // Register form, or captcha form for registering
+
+            var formElement = $('<input type="hidden" name="return_to">'); // Make our element
+            formElement.attr('value',
+            whereToRedirectAfterRegistering); // Shopify will use this value as the redirect destination
+
+            // formElement looks like <input type="hidden" name="return_to" value="/checkout" />
+            registerForm.append(formElement); // Add the element to the form.
+        }(jQuery));
+    </script>
