@@ -8,6 +8,7 @@ JS (Front End):
 3. redirect-after-account-creation - Script to be added in theme.liquid when requested to redirect on login.
 4. shopify-checkout-redemption-dropdown.liquid - Dropdown for fixed amount redemption options. Implement this on checkout page.
 5. shopify-checkout-slider.liquid - Slider for the variable redemption option. Implement this on checkout page.
+6. shopify-checkout-apply-point-balance.liquid - Apply all available balance button for checkout.
 
 Ruby (Cart / Checkout Logic):
 
