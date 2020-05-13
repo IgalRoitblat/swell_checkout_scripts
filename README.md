@@ -9,6 +9,7 @@ JS (Front End):
 4. shopify-checkout-redemption-dropdown.liquid - Dropdown for fixed amount redemption options. Implement this on checkout page.
 5. shopify-checkout-slider.liquid - Slider for the variable redemption option. Implement this on checkout page.
 6. shopify-checkout-apply-point-balance.liquid - Apply all available balance button for checkout.
+7. shopify-checkout-force-order-summary-open.js - Forces order summary to open on mobile in the Shopify Checkout.
 
 Ruby (Cart / Checkout Logic):
 
