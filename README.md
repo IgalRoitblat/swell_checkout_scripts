@@ -10,6 +10,7 @@ JS (Front End):
 5. shopify-checkout-slider.liquid - Slider for the variable redemption option. Implement this on checkout page.
 6. shopify-checkout-apply-point-balance.liquid - Apply all available balance button for checkout.
 7. shopify-checkout-force-order-summary-open.js - Forces order summary to open on mobile in the Shopify Checkout.
+8. loyaltyOptInCodeSetup.html - Adding a checkbox to allow users to opt-in the rewards program on Shopify using local storage.
 
 Ruby (Cart / Checkout Logic):
 
