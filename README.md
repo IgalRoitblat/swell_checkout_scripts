@@ -17,3 +17,4 @@ Ruby (Cart / Checkout Logic):
 2. sample-tier-based-discount-script.rb - Script to implement conditional discount based on VIP tier status and Shopify product tag.
 3. shipping-script.rb - Script to implement tier based shipping discount.
 4. min_cart_amount_coupon_restriction.rb - Use this script to restrict coupons to a minimum cart amount in Shopify.
+5. redemption_script_with_product.rb - This script is to be used for stores that have both cart_fixed_amount redemptions AND free_product redemptions. Implement this in the Shopify script editor.
