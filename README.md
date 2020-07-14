@@ -1,4 +1,5 @@
 # swell_checkout_scripts
+
 Common Swell redemption options at checkout
 
 JS (Front End):
@@ -11,6 +12,7 @@ JS (Front End):
 6. shopify-checkout-apply-point-balance.liquid - Apply all available balance button for checkout.
 7. shopify-checkout-force-order-summary-open.js - Forces order summary to open on mobile in the Shopify Checkout.
 8. loyaltyOptInCodeSetup.html - Adding a checkbox to allow users to opt-in the rewards program on Shopify using local storage.
+9. redirectToRewardsOnClick.js - Redirect to rewards page on login or signup made from the rewards page.
 
 Ruby (Cart / Checkout Logic):
 
