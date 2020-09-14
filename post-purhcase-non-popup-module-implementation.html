@@ -1,0 +1,74 @@
+<!-- Add the widget repo here -->
+<script
+    src="https://cdn-widgetsrepository.yotpo.com/v1/loader/xxxxxx"
+    async
+></script>
+<!-- Initial CSS to create a popup laout for the module -->
+<style>
+    .loyalty-popup-hidden {
+        display: none !important;
+    }
+    .loyalty-popup-overlay {
+        background-color: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-height: 2000px;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .loyalty-popup-overlay h2 {
+        width: 100%;
+        text-align: center;
+        color: white;
+        font-family: Lato;
+        text-transform: uppercase;
+        letter-spacing: 2.8px;
+        margin: 1% 0 5% 0;
+    }
+    .loyalty-referral-container {
+        max-height: 10rem;
+        padding-top: 5%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<!-- module inside container -->
+<div class="loyalty-popup-overlay loyalty-popup-hidden">
+    <div class="loyalty-referral-container">
+        <!-- close button image -->
+        <img
+            class="loyalty-close"
+            src="{{ 'loyalty-close-button.png' | asset_url }}"
+            alt=""
+        />
+        <h2>Thank You!</h2>
+        <div
+            class="yotpo-widget-instance"
+            data-yotpo-instance-id="xxxxx"
+            customer-email-view-input-placeholder="Enter email"
+            referral-views-friends-input-placeholder="Your friends’ emails (separated by commas)"
+            customer-email-view-label-text="Enter your email below to get started"
+            referral-views-friends-label-text="Now enter your friends’ emails"
+        ></div>
+    </div>
+</div>
+<!-- JS to handle module initiation -->
+<script>
+    window.location.href.indexOf("loyalty_thank_you") !== -1
+        ? document
+              .querySelector(".loyalty-popup-overlay")
+              .classList.remove("loyalty-popup-hidden")
+        : "";
+    document.querySelector(".loyalty-close").addEventListener("click", () => {
+        document
+            .querySelector(".loyalty-popup-overlay")
+            .classList.add("loyalty-popup-hidden");
+    });
+</script>

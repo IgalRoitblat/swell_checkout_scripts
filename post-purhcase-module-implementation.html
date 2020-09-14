@@ -1,0 +1,23 @@
+<!-- Add the widget repo here -->
+<script
+    src="https://cdn-widgetsrepository.yotpo.com/v1/loader/xxxxxx"
+    async
+></script>
+<!-- Initial CSS to hide the module -->
+<style type="text/css">
+    .yotpo-checkout-hide {
+        display: none;
+    }
+</style>
+<!-- module inside container -->
+<div class="yotpo-refer-popup-container yotpo-checkout-hide">
+    <div class="yotpo-widget-instance" data-yotpo-instance-id="xxxxx"></div>
+</div>
+<!-- JS to handle module initiation -->
+<script type="text/javascript">
+    window.location.href.indexOf("thank_you") !== -1
+        ? document
+              .querySelector(".yotpo-checkout-hide")
+              .classList.remove("yotpo-checkout-hide")
+        : "";
+</script>

@@ -13,6 +13,8 @@ JS (Front End):
 7. shopify-checkout-force-order-summary-open.js - Forces order summary to open on mobile in the Shopify Checkout.
 8. loyaltyOptInCodeSetup.html - Adding a checkbox to allow users to opt-in the rewards program on Shopify using local storage.
 9. redirectToRewardsOnClick.js - Redirect to rewards page on login or signup made from the rewards page.
+10. post-purchase-module-implementation.html - Implement the post purhcase popup layout module in the checkout page.
+11. post-purhcase-non-popup-module-implementation.html - Implement a normal referral module layout as popup in the checkout page.
 
 Ruby (Cart / Checkout Logic):
 
