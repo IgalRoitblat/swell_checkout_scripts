@@ -1,0 +1,131 @@
+<!-- Code for register.liquid -->
+
+ <!-- Loyalty OptIn checkbox HTML -->
+          <div id="loyaltyoptin" style="margin: 20px 0;"><input type="checkbox" id="loyalty-opt-in" name="loyalty-opt-in">
+          <b>  <label style="font-size: 0.9375rem;" for="loyalty-opt-in"> Check here to opt in to our loyalty program! </label> </b>
+          </div>
+ <!-- End of Loyalty OptIn checkbox HTML -->
+
+<!-- Signup Page JS Loyalty Swell -->
+<script type="text/javascript">
+	let loyaltyOptInCheckbox = document.querySelector("#loyalty-opt-in");
+  //localStorage.setItem('LoyaltyOptIn', true);
+	loyaltyOptInCheckbox.addEventListener("click", (e) => updateLocalStorageWithCheckboxValue(e, loyaltyOptInCheckbox.checked))
+	  
+	function updateLocalStorageWithCheckboxValue(e, checkboxValue) {
+		checkboxValue ? onLoyaltyCheckboxCheck() : onLoyaltyCheckboxUnCheck();
+       console.log(checkboxValue);
+	}
+
+	function onLoyaltyCheckboxCheck() {
+		localStorage.setItem('LoyaltyOptIn', true);
+      	sessionStorage.setItem('LoyaltyOptIn', true);
+	}
+	  
+	function onLoyaltyCheckboxUnCheck() {
+		localStorage.setItem('LoyaltyOptIn', false);
+      	sessionStorage.setItem('LoyaltyOptIn', false);
+	}
+</script>
+<!-- End of Signup Page JS -->
+<!-- End of Code for register.liquid -->
+
+
+<!-- Code for account.liquid -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!-- HTML below is optional. It's a display message to encourage the customer to opt-in if they are currently opted-out  -->
+ <div class="account-page--column-large">
+      <div class="opted-out">
+        <img src="{{ 'rewards-banner-3.jpg' | asset_url }}">
+        <span> Click <b class="loyalty-opt-in"> Here </b> if you would like to opt-in to our loyalty program</span>
+      </div>
+    </div>
+
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded',() => {                 
+		$(document).on("swell:setup",() => {
+	        var onSuccess = () => console.log("User Opted-in");
+  			var onSuccessOut = () => console.log("User Opted-out");
+	        var onError = (err) => console.log("Opt-in failed");
+  			
+  			// check opt-in status via API first
+  			let optInStatus = swellAPI.getCustomerDetails().isOptIn;
+        	optInStatus ? $('.opted-out').css('display','none') : $('.opted-out').css('display','block');
+
+  			// check opt-in status via local and sessionStorage second
+	        if (localStorage.getItem("LoyaltyOptIn") === "true" || sessionStorage.getItem('LoyaltyOptIn') === "true") {
+	        	swellAPI.updateOptInCustomer({shouldOptIn:true}, onSuccess, onError);
+              	//optOutContact.show();
+              	$('.opted-out').css('display','none');
+	        	localStorage.removeItem("LoyaltyOptIn");
+            } else if (localStorage.getItem("LoyaltyOptIn") === "false" || sessionStorage.getItem('LoyaltyOptIn') === "false")  {
+            	swellAPI.updateOptInCustomer({shouldOptIn:false}, onSuccessOut, onError);
+              	$('.opted-out').css('display','block');
+	        	localStorage.removeItem("LoyaltyOptIn");
+            }
+  			let optSuccess = () => console.log('success');
+  			let optFailure = (err) => console.log('failure' + err);
+            let optInRewards = function(){swellAPI.updateOptInCustomer({shouldOptIn:true}, optSuccess, optFailure)};
+            let optOutRewards = function(){swellAPI.updateOptInCustomer({shouldOptIn:false}, optSuccess, optFailure)};
+  			
+        console.log('opt-in-status is ' + optInStatus);
+        
+        optInNode.click(function(){
+          optInStatus ? /* optOutRewards() */ '' : swellAPI.updateOptInCustomer({shouldOptIn:true}, optSuccess, optFailure);
+          location.reload();
+        })
+		});
+	})
+    
+    let optInNode = $('.loyalty-opt-in');
+    let optOutContact = $('.opted-out')
+</script>
+<!-- End of Account Page JS -->
+
+<style>
+  div.account-page--two-column {
+    display: flex;
+  }
+
+  .loyalty-opt-in { 
+    cursor: pointer;
+  }
+
+  .opted-out {
+    position: relative;
+    display: none;
+  }
+
+  .contact-opt-out {
+    display: none;
+  }
+  
+  .opted-out img {
+    width: 100%
+  }
+  
+  .opted-out span {
+    position: absolute;
+    top: 38%;
+    left: 5%;
+    max-width: 380px;
+  }
+  
+  .opted-out button {
+    position: absolute;
+    top: 55%;
+    left: 5%;
+    color: rgb(255, 255, 255);
+    background: rgb(91, 102, 112);
+    border: 1px solid rgb(91, 102, 112);
+    border-radius: 3px;
+    font-size: 25px;
+    width: 250px;
+    height: 50px;
+    cursor: pointer;
+  }
+</style>
+
+
