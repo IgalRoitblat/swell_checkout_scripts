@@ -15,6 +15,7 @@ JS (Front End):
 9. redirectToRewardsOnClick.js - Redirect to rewards page on login or signup made from the rewards page.
 10. post-purchase-module-implementation.html - Implement the post purhcase popup layout module in the checkout page.
 11. post-purhcase-non-popup-module-implementation.html - Implement a normal referral module layout as popup in the checkout page.
+12. Loyalty Opt In option via SDK. This file is split into two sections, the first should go in register.liquid and the second in account.liquid to give users the option to opt-in or out of loyalty.
 
 Ruby (Cart / Checkout Logic):
 
