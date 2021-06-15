@@ -4,7 +4,7 @@
           $(".fixed-amount").append($("<option>").attr('value', 'starter').text("Choose your rewards"))
           spapi.activeRedemptionOptions.forEach(option => {
               if (option.discount_type === "fixed_amount") {
-                  $(".cart-fixed-amount").append(
+                  $(".fixed-amount").append(
                       $("<option>").text(`${option.prettyDiscount} Off`).attr({
                           "data-redemption-option-id": option.id
                       }).val(option.id).addClass("swell-redemption-link")
