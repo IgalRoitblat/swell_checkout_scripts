@@ -1,15 +1,22 @@
-# This script is to be used for cart_fixed_amount redemptions OR free_product redemptions
+######
+## This script enables line items price adjustments for Yotpo's loyalty products.
+## In order to use script, you have to first install Shopify's Script Editor app.
+##
+## Embed this script in a blank template in Script Editor, and make sure to fill in 'reverse_api_key' in line 15.
+##
+## Last updated: September 10th, 2020
+######
+
 swell_discount_amount_cents = nil
 swell_discount_used = false
 
-# shopify doesn't let us use any hash functions in scripts so had to implement some obfuscation
-def calculate_token(rid)
- # will need to fill this in with your swell api key, reversed
+def calculate_token(point_redemption_id, variant_id)
+ # Fill in your loyalty api key in reverse in the line below
  reverse_api_key = ""
  buckets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
- raw_token = reverse_api_key + rid.to_s.reverse
+ raw_token = variant_id.to_s.reverse + reverse_api_key + point_redemption_id.to_s.reverse
  token = ""
- rotate_amount = 1 + (rid.to_i % 59)
+ rotate_amount = 1 + (point_redemption_id.to_i % 59)
  
  raw_token.each_char do |char|
   ord = char.ord
@@ -30,7 +37,7 @@ def calculate_token(rid)
    token += buckets[new_index]
   end
  end
-
+ 
  return token
 end
 
@@ -46,18 +53,18 @@ Input.cart.line_items.each do |line_item|
  end
 end
 
-
 Input.cart.line_items.each do |line_item|
-
+  
+  variant_id = line_item.variant.id
   swell_points_used = line_item.properties["_swell_points_used"]
   swell_redemption_id = line_item.properties["_swell_redemption_id"]
   swell_redemption_token = line_item.properties["_swell_redemption_token"]
   swell_discount_type = line_item.properties["_swell_discount_type"]
   is_free_product = false
-
+  
   # if there's a free product, reduce the price of this line item by the price of the product
   if swell_discount_type && swell_discount_type.eql?("product")
-    if calculate_token(swell_redemption_id) == swell_redemption_token
+    if calculate_token(swell_redemption_id, variant_id) == swell_redemption_token
       total_line_item_price_cents = line_item.line_price_was.cents
       each_item_price_cents = total_line_item_price_cents / line_item.quantity
       new_price = total_line_item_price_cents - each_item_price_cents
